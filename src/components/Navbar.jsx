@@ -4,10 +4,19 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink className="font-heading text-base" to="/">
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="available-cars">Available Cars</NavLink>
+        <NavLink className="font-heading text-base" to="available-cars">
+          Available Cars
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className="font-heading text-base" to="login">
+          Log-in
+        </NavLink>
       </li>
     </>
   );
@@ -40,10 +49,14 @@ const Navbar = () => {
         </div>
 
         <Link
-          className="flex items-center  font-heading text-2xl font-semibold"
+          className="flex items-center  font-heading md:text-2xl text-lg font-semibold"
           to="/"
         >
-          <img className="w-12 mr-1 rounded-lg" src="images/logo.png" alt="" />
+          <img
+            className="md:w-12 w-8 mr-1 rounded-lg"
+            src="images/logo.png"
+            alt=""
+          />
           Ride<span className="text-[#FF3600]">Sphere</span>
         </Link>
       </div>
