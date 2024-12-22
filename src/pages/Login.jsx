@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { FaGoogle } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../providers/AuthProvider';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const Login = () => {
-  const { handleLogin, setUser } = useContext(AuthContext);
+  const { handleLogin, setUser, handleGoogleLogin } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,6 +42,22 @@ const Login = () => {
         console.log(errorMessage);
       });
   };
+
+  const googleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    handleGoogleLogin(provider)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+
+        toast.success('Successfully sign in with google!');
+        navigate(location?.state ? location.state : '/');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
   return (
     <div>
       <Helmet>
@@ -48,7 +65,7 @@ const Login = () => {
       </Helmet>
       <div className="hero bg-no-repeat bg-cover py-12">
         <div className="hero-content w-full flex-col">
-          <div className="rounded-lg bg-[url(/images/loginBg.jpg)] md:w-3/5 w-full bg-no-repeat bg-cover">
+          <div className="rounded-lg bg-[url(/images/loginBg.jpg)] md:w-3/5 bg-gray-800 bg-blend-overlay w-full bg-no-repeat bg-cover">
             <h1 className="font-bold text-3xl font-heading text-center py-5 text-[#FF3600]">
               Log-In Here
             </h1>
@@ -86,10 +103,10 @@ const Login = () => {
                   <p className="font-body text-white">
                     Don&apos;t Have an Account?{' '}
                     <Link
-                      to="/signup"
+                      to="/register"
                       className=" font-heading text-[#ff3600] hover:underline hover:text-red-500 ml-1"
                     >
-                      Sign up
+                      Register
                     </Link>{' '}
                   </p>
                 </label>
@@ -110,7 +127,7 @@ const Login = () => {
             </div>
             <div className="flex items-start justify-center mb-6">
               <button
-                // onClick={googleLogin}
+                onClick={googleLogin}
                 className="btn border-none font-body bg-[#ff3600] hover:text-[#ff3600] text-white font-bold text-xl"
               >
                 Continue with <FaGoogle />
