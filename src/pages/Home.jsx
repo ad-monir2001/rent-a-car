@@ -3,8 +3,22 @@ import { FaCar } from 'react-icons/fa';
 import { IoPricetagsOutline } from 'react-icons/io5';
 import { TbBrandBooking } from 'react-icons/tb';
 import { RiCustomerService2Fill } from 'react-icons/ri';
+import { useEffect, useState } from 'react';
+import FeaturedCar from '../components/FeaturedCar';
 
 const Home = () => {
+  const [cars, setCars] = useState([]);
+  console.log(cars);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/featuredCars')
+      .then((response) => response.json())
+      .then((data) => {
+        setCars(data);
+      })
+      .catch((error) => console.error('Error:', error));
+  }, []);
+
   return (
     <div>
       {/* Banner Section */}
@@ -23,7 +37,7 @@ const Home = () => {
       </div>
 
       {/* Why choose us */}
-      <div className='space-y-14 my-6 w-11/12 mx-auto'>
+      <div className="space-y-14 my-14 w-11/12 mx-auto">
         <div className="text-center">
           <p className="font-body text-lg text-[#ff3600]">Why Choose Us</p>
           <h1 className="font-heading text-3xl font-semibold">
@@ -84,6 +98,24 @@ const Home = () => {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Recent listing */}
+      <div className="w-11/12 mx-auto my-14">
+      <div className='text-center space-y-1 mb-14'>
+      <p className="font-body text-[#ff3600] ">
+          Find the Ride That Drives You Forward!
+        </p>
+        <h1 className="font-heading text-3xl font-semibold ">
+          Discover Your Dream Car Today!
+        </h1>
+      </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {cars.map((car) => (
+            <FeaturedCar key={car._id} car={car}></FeaturedCar>
+          ))}
         </div>
       </div>
     </div>
