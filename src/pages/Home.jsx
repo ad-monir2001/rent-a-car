@@ -5,16 +5,27 @@ import { TbBrandBooking } from 'react-icons/tb';
 import { RiCustomerService2Fill } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import FeaturedCar from '../components/FeaturedCar';
+import Testimonial from '../components/Testimonial';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
-  console.log(cars);
+  const [testimonials, setTestimonials] = useState([]);
+  console.log(testimonials);
 
   useEffect(() => {
     fetch('http://localhost:5000/featuredCars')
       .then((response) => response.json())
       .then((data) => {
         setCars(data);
+      })
+      .catch((error) => console.error('Error:', error));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/testimonials')
+      .then((response) => response.json())
+      .then((data) => {
+        setTestimonials(data);
       })
       .catch((error) => console.error('Error:', error));
   }, []);
@@ -103,18 +114,38 @@ const Home = () => {
 
       {/* Recent listing */}
       <div className="w-11/12 mx-auto my-14">
-      <div className='text-center space-y-1 mb-14'>
-      <p className="font-body text-[#ff3600] ">
-          Find the Ride That Drives You Forward!
-        </p>
-        <h1 className="font-heading text-3xl font-semibold ">
-          Discover Your Dream Car Today!
-        </h1>
-      </div>
-        
+        <div className="text-center space-y-1 mb-14">
+          <p className="font-body text-[#ff3600] ">
+            Find the Ride That Drives You Forward!
+          </p>
+          <h1 className="font-heading text-3xl font-semibold ">
+            Discover Your Dream Car Today!
+          </h1>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {cars.map((car) => (
             <FeaturedCar key={car._id} car={car}></FeaturedCar>
+          ))}
+        </div>
+      </div>
+
+      {/* testimonials */}
+      <div className=''>
+        <div className="text-center my-14 space-y-2">
+          <p className="font-body text-lg text-[#ff3600]">
+            Voices of Trust, Stories of Satisfaction!
+          </p>
+          <h1 className="font-heading text-3xl font-semibold">
+            What Our Clients are Said About Our Service
+          </h1>
+        </div>
+        <div>
+          {testimonials.map((testimonial) => (
+            <Testimonial
+              key={testimonial._id}
+              testimonial={testimonial}
+            ></Testimonial>
           ))}
         </div>
       </div>
