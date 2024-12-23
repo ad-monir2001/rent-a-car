@@ -1,39 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../providers/AuthProvider';
 import { MdDeleteOutline } from 'react-icons/md';
+import Swal from 'sweetalert2';
 import Dropzone from 'react-dropzone';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const AddCar = () => {
+  const { user } = useContext(AuthContext);
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState();
-  console.log(image);
-
-  // useEffect(() => {
-  //   // Cleanup preview URLs when component unmounts or files change
-  //   return () => {
-  //     files.forEach(file => {
-  //       if (file.preview) {
-  //         URL.revokeObjectURL(file.preview);
-  //       }
-  //     });
-  //   };
-  // }, [files]);
-
-  // delete unwanted file
+  const navigate = useNavigate();
 
   const removeFile = (name) => {
     setFiles((files) => files.filter((file) => file.name !== name));
-
-    // setFiles((files) => {
-    //   const fileToRemove = files.find(file => file.name === name);
-    //   if (fileToRemove?.preview) {
-    //     URL.revokeObjectURL(fileToRemove.preview);
-    //   }
-    //   return files.filter((file) => file.name !== name);
-    // });
   };
 
   const handleForm = (e) => {
     e.preventDefault();
     const form = e.target;
+    const model = form.model.value;
+    const availability = form.availability.value;
+    const regNumber = form.regNumber.value;
+    const features = form.features.value;
+    const description = form.description.value;
+    const bookingCount = form.count.value;
+    const location = form.location.value;
+    const imageURL = image;
+    const date = new Date();
+    const userDetails = user;
+    const bookingStatus = 'pending';
+    const data = {
+      model,
+      availability,
+      regNumber,
+      features,
+      description,
+      bookingCount,
+      location,
+      imageURL,
+      date,
+      userDetails,
+      bookingStatus,
+    };
+
+    axios
+      .post('http://localhost:5000/addCars', data)
+      .then((res) => {
+        console.log(res);
+        Swal.fire({
+          position: 'top',
+          icon: 'success',
+          title: 'Successfully Added Your Review',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   return (
     <div>
@@ -100,7 +125,8 @@ const AddCar = () => {
                   <input
                     type="text"
                     name="features"
-                    placeholder="Vehicle Features"
+                    placeholder="Vehicle Features (e.g., GPS, AC, etc.)
+"
                     className="input input-bordered font-body"
                     required
                   />
@@ -153,7 +179,7 @@ const AddCar = () => {
                         const newFiles = acceptedFiles.map((file) => ({
                           name: file.name,
                           preview: URL.createObjectURL(file),
-                          file: file, // Store the original file for form submission
+                          file: file,
                         }));
 
                         if (newFiles.length > 0) {
@@ -225,8 +251,6 @@ const AddCar = () => {
                     Add Review
                   </button>
                 </div>
-
-                <div></div>
               </form>
             </div>
           </div>

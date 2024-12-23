@@ -10,7 +10,7 @@ import Testimonial from '../components/Testimonial';
 const Home = () => {
   const [cars, setCars] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
-  console.log(testimonials);
+
 
   useEffect(() => {
     fetch('http://localhost:5000/featuredCars')
