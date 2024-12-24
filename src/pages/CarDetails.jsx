@@ -61,7 +61,7 @@ const CarDetails = () => {
               {/* Book Now Button */}
               <div className="flex justify-between items-center">
                 <button
-                  // onClick={() => setShowModal(true)}
+                  onClick={() => document.getElementById('conform').showModal()}
                   className="bg-green-500 font-heading text-white font-semibold py-2 px-4 rounded-lg transition-colors"
                 >
                   Book Now
@@ -77,6 +77,55 @@ const CarDetails = () => {
           </div>
         </div>
       ))}
+
+      {/* show the conformation modal */}
+      <dialog id="conform" className="modal modal-bottom sm:modal-middle">
+        {car.map((c) => (
+          <div key={c._id} className="modal-box text-center">
+            <h3 className="font-bold text-xl font-heading text-[#ff3600]">
+              Congratulations!!!
+            </h3>
+            <p className="py-1 font-body italic">
+              You have successfully Booked{' '}
+              <span className="font-heading text-[#ff3600] text-xl">
+                {c.model}
+              </span>
+            </p>
+            <div className="flex items-center justify-between border p-8 rounded-xl my-2 ">
+              <div className="space-y-2">
+                <p>
+                  Price per day:{' '}
+                  <span className="font-body text-green-500">{c.price}$</span>
+                </p>
+                <p>
+                  Location:{' '}
+                  <span className="font-body text-green-500">{c.location}</span>
+                </p>
+              </div>
+              <div className="space-y-2">
+                <p>
+                  RegNumber:{' '}
+                  <span className="font-body text-green-500">
+                    {c.regNumber}
+                  </span>
+                </p>
+                <p>
+                  Booking Status:{' '}
+                  <span className="font-body text-green-500">
+                    {c.bookingStatus}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        ))}
+      </dialog>
     </div>
   );
 };
