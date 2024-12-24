@@ -10,7 +10,6 @@ const AddCar = () => {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState();
   const navigate = useNavigate();
-
   const removeFile = (name) => {
     setFiles((files) => files.filter((file) => file.name !== name));
   };
@@ -19,6 +18,7 @@ const AddCar = () => {
     e.preventDefault();
     const form = e.target;
     const model = form.model.value;
+    const price = form.price.value;
     const availability = form.availability.value;
     const regNumber = form.regNumber.value;
     const features = form.features.value;
@@ -27,10 +27,13 @@ const AddCar = () => {
     const location = form.location.value;
     const imageURL = image;
     const date = new Date();
-    const userDetails = user;
+    const userEmail = user.email;
+    const userName = user.displayName
+    const userImage = user.photoURL
     const bookingStatus = 'pending';
     const data = {
       model,
+      price,
       availability,
       regNumber,
       features,
@@ -39,8 +42,10 @@ const AddCar = () => {
       location,
       imageURL,
       date,
-      userDetails,
+      userEmail,
+      userName,
       bookingStatus,
+      userImage
     };
 
     axios
@@ -50,11 +55,11 @@ const AddCar = () => {
         Swal.fire({
           position: 'top',
           icon: 'success',
-          title: 'Successfully Added Your Review',
+          title: 'Successfully Added Your Car',
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate('/');
+        navigate('/my-cars');
       })
       .catch((error) => {
         console.log(error.message);
@@ -83,6 +88,20 @@ const AddCar = () => {
                     type="text"
                     name="model"
                     placeholder="The car model"
+                    className="input input-bordered font-body"
+                    required
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="font-medium text-xl font-heading text-[#ff3600]">
+                      Daily Rental Price
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="Price"
                     className="input input-bordered font-body"
                     required
                   />
