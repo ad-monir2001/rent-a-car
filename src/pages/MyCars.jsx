@@ -11,12 +11,29 @@ const MyCars = () => {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState();
   const [carId, setCarId] = useState();
+
+  const [sortOption, setSortOption] = useState('');
   const [errors, setErrors] = useState({});
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
   const [loading, setLoading] = useState(true);
   const removeFile = (name) => {
     setFiles((files) => files.filter((file) => file.name !== name));
+  };
+
+  // Fetch sorted reviews
+  const fetchSortedReviews = async (sortBy = '') => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/addCars/sort`, {
+        params: { sortBy },
+      });
+      setCarData(response.data);
+    } catch (error) {
+      console.error('Error fetching sorted reviews:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -157,11 +174,38 @@ const MyCars = () => {
   return (
     <div>
       <section className="container px-4 mx-auto">
-        <div className="flex items-center gap-x-3">
-          <h2 className="text-lg font-medium text-gray-800 ">Cars Added</h2>
-          <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-            {carData.length}
-          </span>
+        <div className="text-center my-5 space-y-2 py-4">
+          <p className="font-body text-gray-500 italic">
+            Drive Your Dreams, One Click at a Time! 🚗✨
+          </p>
+          <h1 className="font-heading text-3xl font-semibold text-[#ff3600]">
+            Cars Added By You
+          </h1>
+        </div>
+
+        {/* sort */}
+        <div className="flex items-center justify-center ">
+          <p className="font-heading mr-2 text-xl text-[#ec4899]">Sort by: </p>
+          <select
+            value={sortOption}
+            onChange={(e) => {
+              const selectedOption = e.target.value;
+              setSortOption(selectedOption);
+              fetchSortedReviews(selectedOption);
+            }}
+            className="select select-bordered w-full max-w-xs  font-heading"
+          >
+            <option className="font-heading" value="">
+              Default sort
+            </option>
+            <option className="font-heading" value="price">
+              {' '}
+              Price (Lowest First)
+            </option>
+            <option className="font-heading" value="date">
+              Date  (Newest First)
+            </option>
+          </select>
         </div>
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -265,7 +309,7 @@ const MyCars = () => {
                                   alt="Car"
                                 />
                                 <div>
-                                  <h2 className="font-medium text-gray-800 font-body">
+                                  <h2 className="font-medium text-gray-800  font-heading">
                                     {car.model}
                                   </h2>
                                 </div>
