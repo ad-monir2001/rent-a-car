@@ -339,7 +339,7 @@ const MyCars = () => {
                             {format(new Date(car.date), 'MM/dd/yy')}
                           </td>
                           <td className="px-4 py-4 font-body text-gray-800 whitespace-nowrap">
-                            {car.price}
+                            {car.price} $
                           </td>
                           <td className="px-4 py-4 text-sm whitespace-nowrap">
                             <div className="flex items-center gap-x-6">
