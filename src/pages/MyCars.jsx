@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
-import { format, compareAsc } from 'date-fns';
+import { format, } from 'date-fns';
 import Swal from 'sweetalert2';
-import Dropzone from 'react-dropzone';
+
 import axios from 'axios';
 import { MdDeleteOutline } from 'react-icons/md';
 import { AuthContext } from '../providers/AuthProvider';
 import { Link } from 'react-router-dom';
 const MyCars = () => {
   const [carData, setCarData] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [image, setImage] = useState();
+
+
   const [carId, setCarId] = useState();
 
   const [sortOption, setSortOption] = useState('');
@@ -17,9 +17,7 @@ const MyCars = () => {
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
   const [loading, setLoading] = useState(true);
-  const removeFile = (name) => {
-    setFiles((files) => files.filter((file) => file.name !== name));
-  };
+  
 
   // Fetch sorted reviews
   const fetchSortedReviews = async (sortBy = '') => {
@@ -93,7 +91,7 @@ const MyCars = () => {
     const features = form.features.value;
     const description = form.description.value;
     const location = form.location.value;
-    const imageURL = image;
+    const imageURL = form.image.value;
     const data = {
       model,
       price,
@@ -544,73 +542,24 @@ const MyCars = () => {
               )}
             </div>
 
+            
+
+           
+
             <div className="form-control">
               <label className="label">
                 <span className="font-medium text-xl font-heading text-[#ff3600]">
-                  Upload Your Image
+                  Image here
                 </span>
               </label>
-              <Dropzone
-                accept={{
-                  'image/jpeg': ['.jpg', '.jpeg'],
-                  'image/png': ['.png'],
-                }}
-                onDrop={(acceptedFiles) => {
-                  if (acceptedFiles?.length) {
-                    const newFiles = acceptedFiles.map((file) => ({
-                      name: file.name,
-                      preview: URL.createObjectURL(file),
-                      file: file,
-                    }));
-
-                    if (newFiles.length > 0) {
-                      setImage(newFiles[newFiles.length - 1].preview);
-                    }
-
-                    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-                  }
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div
-                      className="p-16 mt-10 rounded-lg border border-neutral-200"
-                      {...getRootProps()}
-                    >
-                      <input {...getInputProps()} />
-                      <p className="font-body mt-2 text-[#ff3600]">
-                        Drag drop Only images here, or click to select images
-                      </p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
+              <input
+                type="text"
+                name="image"
+                placeholder="Image URL only"
+                className="input input-bordered font-body"
+                required
+              />
             </div>
-
-            {/* preview image here */}
-            <div>
-              <p className="font-heading text-[#ff3600] text-xl mb-3">
-                Image Preview:
-              </p>
-              <div className="flex gap-3">
-                {files?.map((file) => (
-                  <li className="list-none relative" key={file.name}>
-                    <img
-                      src={file.preview}
-                      alt=""
-                      className="w-20 h-20 object-cover rounded-lg"
-                    ></img>
-                    <button
-                      className="absolute right-0 -top-3 text-red-500 bg-white rounded-lg text-2xl"
-                      onClick={() => removeFile(file.name)}
-                    >
-                      <MdDeleteOutline />
-                    </button>
-                  </li>
-                ))}
-              </div>
-            </div>
-
             <div className="form-control">
               <label className="label">
                 <span className="font-medium text-xl font-heading text-[#ff3600]">

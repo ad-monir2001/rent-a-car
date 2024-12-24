@@ -5,10 +5,25 @@ import { LayoutGrid, List } from 'lucide-react';
 
 const AvailableCars = () => {
   const [carData, setCarData] = useState([]);
+  const [sortOption, setSortOption] = useState('');
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState('');
   const [isGridView, setIsGridView] = useState(true);
 
+  // Fetch sorted reviews
+  const fetchSortedReviews = async (sortBy = '') => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/addCars/sort`, {
+        params: { sortBy },
+      });
+      setCarData(response.data);
+    } catch (error) {
+      console.error('Error fetching sorted reviews:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   // search functionality
   const handleSearch = (event) => {
     const item = event.target.value;
@@ -47,6 +62,34 @@ const AvailableCars = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center gap-4 my-8">
+        <div>
+          {/* sort */}
+          <div className="flex  ">
+            <p className="font-heading mr-2 text-xl text-[#ff3600]">
+              Sort by:{' '}
+            </p>
+            <select
+              value={sortOption}
+              onChange={(e) => {
+                const selectedOption = e.target.value;
+                setSortOption(selectedOption);
+                fetchSortedReviews(selectedOption);
+              }}
+              className="select select-bordered w-full max-w-xs  font-heading"
+            >
+              <option className="font-heading" value="">
+                Default sort
+              </option>
+              <option className="font-heading" value="price">
+                {' '}
+                Price (Lowest First)
+              </option>
+              <option className="font-heading" value="date">
+                Date (Newest First)
+              </option>
+            </select>
+          </div>
+        </div>
         {/* Search and View Toggle Container */}
         <div className="flex w-full max-w-xl justify-between items-center gap-4">
           {/* Search Input */}
@@ -104,8 +147,8 @@ const AvailableCars = () => {
       <div
         className={`mx-auto w-11/12 ${
           isGridView
-            ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'
-            : 'flex flex-col gap-4'
+            ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-8'
+            : 'flex flex-col gap-4 my-8'
         }`}
       >
         {searchData.map((car) => (

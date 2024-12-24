@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const AvailableCarCard = ({ car }) => {
   return (
     <div className="max-w-xs mx-auto bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
@@ -35,9 +37,13 @@ const AvailableCarCard = ({ car }) => {
           </p>
         </div>
         <div className="flex justify-between items-center">
-          <button disabled={car.availability === 'Not Available' && true} className="btn btn-sm bg-[#ff3600] text-white font-heading">
+          <Link
+            to={`/car-details/${car._id}`}
+            disabled={car.availability === 'Not Available' && true}
+            className="btn btn-sm bg-[#ff3600] text-white font-heading"
+          >
             Book Now
-          </button>
+          </Link>
           <span className="text-sm text-green-500 font-body">
             Booking: {car.bookingCount}
           </span>

@@ -9,6 +9,7 @@ import MyCars from '../pages/MyCars';
 import MyBookings from '../pages/MyBookings';
 import Root from '../pages/Root';
 import Home from '../pages/Home';
+import CarDetails from '../pages/CarDetails';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,11 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: 'car-details/:id',
+        element: <CarDetails></CarDetails>,
+        loader: (params)=> fetch(`http://localhost:5000/addCars/${params.id}`)
+      }
     ],
   },
 ]);

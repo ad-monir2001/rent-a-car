@@ -1,18 +1,16 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../providers/AuthProvider';
-import { MdDeleteOutline } from 'react-icons/md';
+
 import Swal from 'sweetalert2';
-import Dropzone from 'react-dropzone';
+
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const AddCar = () => {
   const { user } = useContext(AuthContext);
-  const [files, setFiles] = useState([]);
-  const [image, setImage] = useState();
+
+
   const navigate = useNavigate();
-  const removeFile = (name) => {
-    setFiles((files) => files.filter((file) => file.name !== name));
-  };
+  
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -25,7 +23,7 @@ const AddCar = () => {
     const description = form.description.value;
     const bookingCount = form.count.value;
     const location = form.location.value;
-    const imageURL = image;
+    const imageURL = form.image.value;
     const date = new Date();
     const userEmail = user.email;
     const userName = user.displayName
@@ -182,74 +180,23 @@ const AddCar = () => {
                     required
                   />
                 </div>
+                
+
+
                 <div className="form-control">
                   <label className="label">
                     <span className="font-medium text-xl font-heading text-[#ff3600]">
-                      Upload Your Image
+                      Image URL
                     </span>
                   </label>
-                  <Dropzone
-                    accept={{
-                      'image/jpeg': ['.jpg', '.jpeg'],
-                      'image/png': ['.png'],
-                    }}
-                    onDrop={(acceptedFiles) => {
-                      if (acceptedFiles?.length) {
-                        const newFiles = acceptedFiles.map((file) => ({
-                          name: file.name,
-                          preview: URL.createObjectURL(file),
-                          file: file,
-                        }));
-
-                        if (newFiles.length > 0) {
-                          setImage(newFiles[newFiles.length - 1].preview);
-                        }
-
-                        setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-                      }
-                    }}
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div
-                          className="p-16 mt-10 rounded-lg border border-neutral-200"
-                          {...getRootProps()}
-                        >
-                          <input {...getInputProps()} />
-                          <p className="font-body mt-2 text-[#ff3600]">
-                            Drag drop Only images here, or click to select
-                            images
-                          </p>
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
+                  <input
+                    type="text"
+                    name="image"
+                    placeholder="Image URL only"
+                    className="input input-bordered font-body"
+                    required
+                  />
                 </div>
-
-                {/* preview image here */}
-                <div>
-                  <p className="font-heading text-[#ff3600] text-xl mb-3">
-                    Image Preview:
-                  </p>
-                  <div className="flex gap-3">
-                    {files?.map((file) => (
-                      <li className="list-none relative" key={file.name}>
-                        <img
-                          src={file.preview}
-                          alt=""
-                          className="w-20 h-20 object-cover rounded-lg"
-                        ></img>
-                        <button
-                          className="absolute right-0 -top-3 text-red-500 bg-white rounded-lg text-2xl"
-                          onClick={() => removeFile(file.name)}
-                        >
-                          <MdDeleteOutline />
-                        </button>
-                      </li>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="form-control">
                   <label className="label">
                     <span className="font-medium text-xl font-heading text-[#ff3600]">
