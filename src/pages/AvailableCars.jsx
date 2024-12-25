@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import AvailableCarCard from '../components/AvailableCarCard';
 import { LayoutGrid, List } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import AvailableCarCard from '../components/AvailableCarCard';
 
 const AvailableCars = () => {
   const [carData, setCarData] = useState([]);
@@ -14,7 +14,7 @@ const AvailableCars = () => {
   const fetchSortedReviews = async (sortBy = '') => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5000/addCars/sort`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars/sort`, {
         params: { sortBy },
       });
       setCarData(response.data);
@@ -38,7 +38,7 @@ const AvailableCars = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/addCars`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars`);
         setCarData(response.data);
       } catch (error) {
         console.error('An error occurred while fetching car data:', error);
@@ -147,7 +147,7 @@ const AvailableCars = () => {
       <div
         className={`mx-auto w-11/12 ${
           isGridView
-            ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-8'
+            ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-14'
             : 'flex flex-col gap-4 my-8'
         }`}
       >

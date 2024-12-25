@@ -1,15 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ErrorPage from '../pages/ErrorPage';
-import Login from '../pages/Login';
-import Registration from '../pages/Registration';
-import AvailableCars from '../pages/AvailableCars';
-import PrivateRoute from './PrivateRoute';
 import AddCar from '../pages/AddCar';
-import MyCars from '../pages/MyCars';
-import MyBookings from '../pages/MyBookings';
-import Root from '../pages/Root';
-import Home from '../pages/Home';
+import AvailableCars from '../pages/AvailableCars';
 import CarDetails from '../pages/CarDetails';
+import ErrorPage from '../pages/ErrorPage';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import MyBookings from '../pages/MyBookings';
+import MyCars from '../pages/MyCars';
+import Registration from '../pages/Registration';
+import Root from '../pages/Root';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -59,8 +59,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'car-details/:id',
-        element: <CarDetails></CarDetails>,
-        loader: (params)=> fetch(`http://localhost:5000/addCars/${params.id}`)
+        element: <PrivateRoute><CarDetails></CarDetails></PrivateRoute>,
+        loader: (params)=> fetch(`${import.meta.env.VITE_API_URL}/addCars/${params.id}`)
       }
     ],
   },

@@ -1,19 +1,45 @@
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
 
 const CarDetails = () => {
   const { id } = useParams();
   const [carData, setCarData] = useState([]);
+  const { user } = useContext(AuthContext);
 
   const car = carData.filter((data) => data._id === id);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`http://localhost:5000/addCars`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/addCars`);
       const data = await res.json();
       setCarData(data);
     };
     fetchData();
   }, []);
+
+  const handleBooking = (id,imageURL,model,price,bookingStatus) => {
+    const bookedCarId = id;
+    const date = new Date();
+    const bookedBy = user.email;
+    // const imgURL = imageURL;
+    // const carModel = model;
+    // const dailyPrice = price;
+    // const status = bookingStatus;
+    const bookingData = { bookedCarId, bookedBy, date,imageURL, model,price,bookingStatus};
+    console.log(bookingData);
+
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/bookedCars`, bookingData)
+      .then((res) => {
+        console.log(res);
+        document.getElementById('conform').showModal()
+      })
+      .catch((error) => {
+        toast.error(`${error.response.data}`)
+      });
+  };
 
   return (
     <div>
@@ -61,7 +87,10 @@ const CarDetails = () => {
               {/* Book Now Button */}
               <div className="flex justify-between items-center">
                 <button
-                  onClick={() => document.getElementById('conform').showModal()}
+                  onClick={() => {
+                    
+                    handleBooking(c._id,c.imageURL,c.model,c.price,c.bookingStatus);
+                  }}
                   className="bg-green-500 font-heading text-white font-semibold py-2 px-4 rounded-lg transition-colors"
                 >
                   Book Now
@@ -126,6 +155,7 @@ const CarDetails = () => {
           </div>
         ))}
       </dialog>
+      <div><Toaster/></div>
     </div>
   );
 };

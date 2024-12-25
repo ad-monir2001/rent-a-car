@@ -21,7 +21,7 @@ const AddCar = () => {
     const regNumber = form.regNumber.value;
     const features = form.features.value;
     const description = form.description.value;
-    const bookingCount = form.count.value;
+    const bookingCount = parseInt(form.count.value);
     const location = form.location.value;
     const imageURL = form.image.value;
     const date = new Date();
@@ -47,7 +47,7 @@ const AddCar = () => {
     };
 
     axios
-      .post('http://localhost:5000/addCars', data)
+      .post(`${import.meta.env.VITE_API_URL}/addCars`, data)
       .then((res) => {
         console.log(res);
         Swal.fire({

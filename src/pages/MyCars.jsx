@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
 import { format, } from 'date-fns';
+import { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 import axios from 'axios';
-import { MdDeleteOutline } from 'react-icons/md';
-import { AuthContext } from '../providers/AuthProvider';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
 const MyCars = () => {
   const [carData, setCarData] = useState([]);
 
@@ -23,7 +22,7 @@ const MyCars = () => {
   const fetchSortedReviews = async (sortBy = '') => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5000/addCars/sort`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars/sort`, {
         params: { sortBy },
       });
       setCarData(response.data);
@@ -39,7 +38,7 @@ const MyCars = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/addCars/email/${userEmail}`
+          `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}`
         );
         setCarData(response.data);
       } catch (error) {
@@ -110,7 +109,7 @@ const MyCars = () => {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:5000/addCars/${carId}`,
+        `${import.meta.env.VITE_API_URL}/addCars/${carId}`,
         data
       );
       Swal.fire({
@@ -122,7 +121,7 @@ const MyCars = () => {
       });
       document.getElementById('my_modal_5').close();
       const updatedCars = await axios.get(
-        `http://localhost:5000/addCars/email/${userEmail}`
+        `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}`
       );
       setCarData(updatedCars.data);
       return response.data;
@@ -147,7 +146,7 @@ const MyCars = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/addCars/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/addCars/${id}`, {
           method: 'DELETE',
         })
           .then((res) => res.json())

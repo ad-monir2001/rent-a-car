@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { FaCar } from 'react-icons/fa';
 import { IoPricetagsOutline } from 'react-icons/io5';
-import { TbBrandBooking } from 'react-icons/tb';
 import { RiCustomerService2Fill } from 'react-icons/ri';
-import { useEffect, useState } from 'react';
+import { TbBrandBooking } from 'react-icons/tb';
+import { Link } from 'react-router-dom';
 import FeaturedCar from '../components/FeaturedCar';
 import Testimonial from '../components/Testimonial';
 
@@ -13,7 +13,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/featuredCars')
+    fetch(`${import.meta.env.VITE_API_URL}/featuredCars`)
       .then((response) => response.json())
       .then((data) => {
         setCars(data);
@@ -22,7 +22,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:5000/testimonials')
+    fetch(`${import.meta.env.VITE_API_URL}/testimonials`)
       .then((response) => response.json())
       .then((data) => {
         setTestimonials(data);
