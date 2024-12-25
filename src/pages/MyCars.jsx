@@ -1,4 +1,4 @@
-import { format, } from 'date-fns';
+import { format } from 'date-fns';
 import { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
@@ -8,24 +8,27 @@ import { AuthContext } from '../providers/AuthProvider';
 const MyCars = () => {
   const [carData, setCarData] = useState([]);
 
-
   const [carId, setCarId] = useState();
 
   const [sortOption, setSortOption] = useState('');
   const [errors, setErrors] = useState({});
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
+
   const [loading, setLoading] = useState(true);
-  
 
   // Fetch sorted reviews
   const fetchSortedReviews = async (sortBy = '') => {
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars/sort`, {
-        params: { sortBy },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}/sort`,
+        {
+          params: { sortBy },
+        }
+      );
       setCarData(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error('Error fetching sorted reviews:', error);
     } finally {
@@ -200,7 +203,7 @@ const MyCars = () => {
               Price (Lowest First)
             </option>
             <option className="font-heading" value="date">
-              Date  (Newest First)
+              Date (Newest First)
             </option>
           </select>
         </div>
@@ -540,10 +543,6 @@ const MyCars = () => {
                 </span>
               )}
             </div>
-
-            
-
-           
 
             <div className="form-control">
               <label className="label">

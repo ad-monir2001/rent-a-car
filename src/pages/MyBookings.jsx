@@ -4,13 +4,25 @@ import { CalendarCog, Trash } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../providers/AuthProvider';
 const MyBookings = () => {
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(null);
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
-  console.log(carData);
+
+  // date handle
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    console.log('Date changed:', date);
+  };
+
+  const handleDateSelect = (date) => {
+    console.log('Date selected:', date);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,47 +43,50 @@ const MyBookings = () => {
   }, [userEmail]);
 
   // Cancel a Booking
-  // const handleCancelBooking = (id) => {
-  //   Swal.fire({
-  //     title: 'Are you sure you want to cancel this booking?',
-  //     text: "Think twice before you cancel – your adventure awaits!",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes',
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       axios.patch(`${import.meta.env.VITE_API_URL}/addCars/${id}`, {
+  const handleCancelBooking = (id) => {
+    Swal.fire({
+      title: 'Are you sure you want to cancel this booking?',
+      text: 'Think twice before you cancel – your adventure awaits!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .patch(`${import.meta.env.VITE_API_URL}/bookedCars/${id}`, {
+            bookingStatus: 'canceled',
+          })
+          .then((response) => {
+            console.log('Response:', response.data);
+            if (response.data.modifiedCount > 0) {
+              setCarData((prevBookings) =>
+                prevBookings.map((booking) =>
+                  booking._id === id
+                    ? { ...booking, bookingStatus: 'canceled' }
+                    : booking
+                )
+              );
+              Swal.fire({
+                title: 'Updated!',
+                text: 'Your booking has been cancelled.',
+                icon: 'success',
+              });
+            }
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to cancel booking.',
+              icon: 'error',
+            });
+            console.error('Error:', error);
+          });
+      }
+    });
+  };
 
-  //         bookingStatus: 'canceled'
-  //       })
-  //         .then((response) => {
-  //           if (response.data.modifiedCount > 0) {
-  //             Swal.fire({
-  //               title: 'Updated!',
-  //               text: 'Your booking has been cancelled.',
-  //               icon: 'success',
-  //             });
-
-  //             // Update the local state with the modified data
-  //             const updatedCarData = carData.map(car =>
-  //               car._id === id ? { ...car, bookingStatus: 'cancelled' } : car
-  //             );
-  //             setCarData(updatedCarData);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           Swal.fire({
-  //             title: 'Error!',
-  //             text: 'Failed to cancel booking.',
-  //             icon: 'error',
-  //           });
-  //           console.error('Error:', error);
-  //         });
-  //     }
-  //   });
-  // };
   return (
     <div>
       <div className="text-center space-y-1 my-4">
@@ -190,22 +205,23 @@ const MyBookings = () => {
                             {/* cancel booking button */}
                             <button
                               onClick={() => handleCancelBooking(car._id)}
-                              className="text-gray-800 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-800 hover:text-red-500 focus:outline-none"
+                              className="flex flex-col items-center transition-colors duration-200 text-red-500 focus:outline-none"
                             >
                               <Trash />
+                              <span className="text-sm font-body">Cancel</span>
                             </button>
 
-                            {/* Update button */}
+                            {/* Update date */}
                             <button
                               onClick={() => {
-                                document
-                                  .getElementById('my_modal_5')
-                                  .showModal();
-                                setCarId(car._id);
+                                document.getElementById('conform').showModal();
                               }}
-                              className="text-gray-800 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-800 hover:text-yellow-500 focus:outline-none"
+                              className=" transition-colors duration-200 text-blue-500 focus:outline-none flex items-center flex-col"
                             >
                               <CalendarCog />
+                              <span className="text-sm font-body">
+                                Modify Date
+                              </span>
                             </button>
                           </div>
                         </td>
@@ -233,6 +249,48 @@ const MyBookings = () => {
           </div>
         </div>
       </div>
+      {/* show the conformation modal */}
+      <dialog id="conform" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box text-center">
+          <h3 className="font-bold text-xl font-heading text-[#ff3600]">
+            Select Your Booking Date
+          </h3>
+          <div className="flex items-center justify-between border py-14 px-2 rounded-xl my-2 ">
+            <div className="flex gap-1">
+              <p>Start:</p>
+              <DatePicker
+                className="font-body border rounded-lg text-center"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                onChange={handleDateChange}
+              />
+            </div>
+            <div className="flex gap-1">
+              <p>End:</p>
+              <DatePicker
+                className="font-body border rounded-lg text-center"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                onChange={handleDateChange}
+              />
+            </div>
+          </div>
+          <div className="modal-action">
+            <form
+              method="dialog"
+              className="flex justify-between gap-4 items-center"
+            >
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-success font-heading text-white">
+                Confirm
+              </button>
+              <button className="btn btn-error text-white font-heading">
+                Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

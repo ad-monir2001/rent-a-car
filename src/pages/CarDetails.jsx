@@ -23,12 +23,7 @@ const CarDetails = () => {
     const bookedCarId = id;
     const date = new Date();
     const bookedBy = user.email;
-    // const imgURL = imageURL;
-    // const carModel = model;
-    // const dailyPrice = price;
-    // const status = bookingStatus;
     const bookingData = { bookedCarId, bookedBy, date,imageURL, model,price,bookingStatus};
-    console.log(bookingData);
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/bookedCars`, bookingData)
