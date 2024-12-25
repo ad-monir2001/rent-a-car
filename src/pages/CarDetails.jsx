@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import toast, { Toaster } from 'react-hot-toast';
+import { format } from 'date-fns';
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -19,11 +20,12 @@ const CarDetails = () => {
     fetchData();
   }, []);
 
+
   const handleBooking = (id,imageURL,model,price,bookingStatus) => {
     const bookedCarId = id;
-    const date = new Date();
+    const bookingDate = format(new Date(), "MM/dd/yy h:m");
     const bookedBy = user.email;
-    const bookingData = { bookedCarId, bookedBy, date,imageURL, model,price,bookingStatus};
+    const bookingData = { bookedCarId, bookedBy, bookingDate,imageURL, model,price,bookingStatus};
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/bookedCars`, bookingData)

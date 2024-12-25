@@ -3,25 +3,58 @@ import { format } from 'date-fns';
 import { CalendarCog, Trash } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../providers/AuthProvider';
 const MyBookings = () => {
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
 
   // date handle
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    console.log('Date changed:', date);
+
+  // start
+  const handleStartDateChange = (date) => {
+    setSelectedStartDate(date);
   };
 
-  const handleDateSelect = (date) => {
-    console.log('Date selected:', date);
+  // end
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
+  };
+
+  const handleBookingDate = async (id) => {
+    try {
+      if (!selectedStartDate || !selectedEndDate) {
+        console.error('Please select both start and end dates');
+        return;
+      }
+      const bookingStart = format(new Date(selectedStartDate), 'MM/dd/yy');
+      const bookingEnd = format(new Date(selectedEndDate), 'MM/dd/yy');
+      const date = `${bookingStart} to ${bookingEnd}`;
+
+      // Add error handling and loading state if needed
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/bookedCars/${id}`,
+        {
+          date,
+          userEmail: user.email,
+          updatedAt: new Date().toISOString(),
+        }
+      );
+      console.log('Booking updated successfully:', response.data);
+
+      setSelectedStartDate(null);
+      setSelectedEndDate(null);
+    } catch (error) {
+      console.error('Error updating booking:', error);
+    }
   };
 
   useEffect(() => {
@@ -171,7 +204,8 @@ const MyBookings = () => {
                           {parseInt(car.price) + parseInt(car.price * 0.15)}
                         </td>
                         <td className="px-4 py-4 text-sm  font-body whitespace-nowrap">
-                          {format(new Date(car.date), 'MM/dd/yy')}
+                          {/* {format(new Date(car.date), 'MM/dd/yy h:m')} */}
+                          {car.bookingDate}
                         </td>
                         <td className="px-4 py-4 font-body  whitespace-nowrap">
                           <div
@@ -215,6 +249,7 @@ const MyBookings = () => {
                             <button
                               onClick={() => {
                                 document.getElementById('conform').showModal();
+                                handleBookingDate(car._id);
                               }}
                               className=" transition-colors duration-200 text-blue-500 focus:outline-none flex items-center flex-col"
                             >
@@ -249,6 +284,21 @@ const MyBookings = () => {
           </div>
         </div>
       </div>
+
+      <div className='mx-auto w-11/12 my-10'>
+      <div className='text-center my-9 space-y-1'>
+      <p className='font-body italic text-gray-500'>Drive Your Budget Further – Affordable Daily Rentals for Every Journey!</p>
+      <h1 className='font-heading text-[#ff3600] font-semibold text-2xl'>Charts Based on car Daily Rental Price</h1>
+      </div>
+        <BarChart width={600} height={300} data={carData}>
+          <XAxis dataKey="model" stroke="#8884d8" />
+          <YAxis />
+          <Tooltip />
+          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+          <Bar dataKey="price" fill="#8884d8" barSize={30} />
+        </BarChart>
+      </div>
+
       {/* show the conformation modal */}
       <dialog id="conform" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box text-center">
@@ -260,18 +310,20 @@ const MyBookings = () => {
               <p>Start:</p>
               <DatePicker
                 className="font-body border rounded-lg text-center"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                onChange={handleDateChange}
+                selected={selectedStartDate}
+                onChange={handleStartDateChange}
+                minDate={new Date()}
+                placeholderText="Select Start Date"
               />
             </div>
             <div className="flex gap-1">
               <p>End:</p>
               <DatePicker
                 className="font-body border rounded-lg text-center"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                onChange={handleDateChange}
+                selected={selectedEndDate}
+                onChange={handleEndDateChange}
+                minDate={selectedStartDate || new Date()}
+                placeholderText="Select End Date"
               />
             </div>
           </div>
@@ -281,7 +333,10 @@ const MyBookings = () => {
               className="flex justify-between gap-4 items-center"
             >
               {/* if there is a button in form, it will close the modal */}
-              <button className="btn btn-success font-heading text-white">
+              <button
+                onClick={handleBookingDate}
+                className="btn btn-success font-heading text-white"
+              >
                 Confirm
               </button>
               <button className="btn btn-error text-white font-heading">
