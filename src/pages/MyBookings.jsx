@@ -12,11 +12,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../providers/AuthProvider';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 const MyBookings = () => {
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectedCarId, setSelectedCarId] = useState(null);
   const { user } = useContext(AuthContext);
   const userEmail = user.email;
 
@@ -32,40 +33,55 @@ const MyBookings = () => {
     setSelectedEndDate(date);
   };
 
-  const handleBookingDate = async (id) => {
+  const handleBookingDate = async () => {
     try {
       if (!selectedStartDate || !selectedEndDate) {
-        toast.success('Please select both start and end dates');
+        toast.error('Please select both start and end dates');
         return;
       }
-      const bookingStart = new Date(selectedStartDate).toISOString();
-      const bookingEnd = new Date(selectedEndDate).toISOString();
 
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/bookedCars/${id}`,
-        {
-          bookingStart,
-          bookingEnd,
-        }
-      );
-      toast.success('Booking updated successfully:', response.data);
-      console.log(bookingEnd, bookingStart);
-      console.log(typeof bookingEnd);
+      const bookingStart = format(new Date(selectedStartDate), 'dd/MM/yyyy');
+      const bookingEnd = format(new Date(selectedEndDate), 'dd/MM/yyyy');
 
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
+      const response = await axiosSecure.put(`/bookedCars/${selectedCarId}`, {
+        bookingStart,
+        bookingEnd,
+      });
+
+      if (response.data) {
+        setCarData((prevData) =>
+          prevData.map((car) =>
+            car._id === selectedCarId
+              ? { ...car, bookingStart, bookingEnd }
+              : car
+          )
+        );
+
+        toast.success('Booking dates updated successfully');
+        setSelectedStartDate(null);
+        setSelectedEndDate(null);
+        setSelectedCarId(null);
+
+        // Close the modal
+        document.getElementById('conform').close();
+      }
     } catch (error) {
-      toast.error('Error updating booking:', error);
+      toast.error(
+        error.response?.data?.message || 'Error updating booking dates'
+      );
     }
+  };
+
+  const openDateModal = (carId) => {
+    setSelectedCarId(carId);
+    document.getElementById('conform').showModal();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axiosSecure.get(
-          `/bookedCars/${userEmail}`
-        );
+        const response = await axiosSecure.get(`/bookedCars/${userEmail}`);
         setCarData(response.data);
       } catch (error) {
         console.error('An error occurred while fetching car data:', error);
@@ -75,7 +91,7 @@ const MyBookings = () => {
     };
 
     fetchData();
-  }, [userEmail]);
+  }, [axiosSecure, userEmail]);
 
   // Cancel a Booking
   const handleCancelBooking = (id) => {
@@ -136,10 +152,8 @@ const MyBookings = () => {
       <div className="flex flex-col mt-6">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className=" w-11/12 my-10 mx-auto py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden border border-gray-200 md:rounded-lg">
-              <div>
-                
-              </div>
+            <div className=" border border-gray-200 md:rounded-lg">
+              <div></div>
               <table className="min-w-full divide-y divide-gray-200 ">
                 <thead className="">
                   <tr className="bg-[#e8f5e9] text-[#1b5e20]">
@@ -255,8 +269,7 @@ const MyBookings = () => {
                             {/* Update date */}
                             <button
                               onClick={() => {
-                                document.getElementById('conform').showModal();
-                                handleBookingDate(car._id);
+                                openDateModal(car._id);
                               }}
                               className=" transition-colors duration-200 text-blue-500 focus:outline-none flex items-center flex-col"
                             >
@@ -313,7 +326,7 @@ const MyBookings = () => {
 
       {/* show the conformation modal */}
       <dialog id="conform" className="modal modal-bottom sm:modal-middle">
-      <Toaster />
+        <Toaster />
         <div className="modal-box text-center">
           <h3 className="font-bold text-xl font-heading text-[#ff3600]">
             Select Your Booking Date
@@ -347,6 +360,7 @@ const MyBookings = () => {
             >
               <button
                 onClick={handleBookingDate}
+                type="button"
                 className="btn btn-success font-heading text-white"
               >
                 Confirm
