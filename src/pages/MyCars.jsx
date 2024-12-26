@@ -85,7 +85,7 @@ const MyCars = () => {
     e.preventDefault();
     const form = e.target;
     const model = form.model.value;
-    const price = form.price.value;
+    const price = parseInt(form.price.value);
     const availability = form.availability.value;
     const regNumber = form.regNumber.value;
     const features = form.features.value;
