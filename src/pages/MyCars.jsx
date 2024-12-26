@@ -3,9 +3,10 @@ import { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
+import { Helmet } from 'react-helmet-async';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 const MyCars = () => {
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const [carData, setCarData] = useState([]);
 
   const [carId, setCarId] = useState();
@@ -39,9 +40,7 @@ const MyCars = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axiosSecure.get(
-          `/addCars/email/${userEmail}`
-        );
+        const response = await axiosSecure.get(`/addCars/email/${userEmail}`);
         setCarData(response.data);
       } catch (error) {
         console.error('An error occurred while fetching car data:', error);
@@ -110,10 +109,7 @@ const MyCars = () => {
       return;
     }
     try {
-      const response = await axiosSecure.patch(
-        `/addCars/${carId}`,
-        data
-      );
+      const response = await axiosSecure.patch(`/addCars/${carId}`, data);
       Swal.fire({
         position: 'top',
         icon: 'success',
@@ -122,9 +118,7 @@ const MyCars = () => {
         timer: 1500,
       });
       document.getElementById('my_modal_5').close();
-      const updatedCars = await axiosSecure.get(
-        `/addCars/email/${userEmail}`
-      );
+      const updatedCars = await axiosSecure.get(`/addCars/email/${userEmail}`);
       setCarData(updatedCars.data);
       return response.data;
     } catch (error) {
@@ -172,6 +166,9 @@ const MyCars = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>RideSphere | My Cars</title>
+      </Helmet>
       <section className="container px-4 mx-auto">
         <div className="text-center my-5 space-y-2 py-4">
           <p className="font-body text-gray-500 italic">
@@ -278,6 +275,14 @@ const MyCars = () => {
                       </th>
                       <th
                         scope="col"
+                        className="px-4 py-3.5 font-heading font-normal text-left rtl:text-right text-gray-800"
+                      >
+                        <button className="flex items-center gap-x-2">
+                          <span>Booking Count</span>
+                        </button>
+                      </th>
+                      <th
+                        scope="col"
                         className="px-4 py-3.5 font-heading font-normal text-left rtl:text-right text-gray-800 "
                       >
                         Daily Rental Price
@@ -336,6 +341,9 @@ const MyCars = () => {
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-800 font-body whitespace-nowrap">
                             {format(new Date(car.date), 'MM/dd/yy')}
+                          </td>
+                          <td className="px-4 py-4 font-body text-gray-800 whitespace-nowrap">
+                            {car.bookingCount}
                           </td>
                           <td className="px-4 py-4 font-body text-gray-800 whitespace-nowrap">
                             {car.price} $

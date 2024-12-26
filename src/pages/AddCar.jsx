@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '../providers/AuthProvider';
-
+import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
 
 import axios from 'axios';
@@ -65,6 +65,9 @@ const AddCar = () => {
   };
   return (
     <div>
+      <Helmet>
+        <title>RideSphere | Add Car</title>
+      </Helmet>
       <div className="text-center my-4 space-y-1">
         <p className="font-body text-lg text-[#ff3600] italic">
           Drive Your Dreams with Ease!

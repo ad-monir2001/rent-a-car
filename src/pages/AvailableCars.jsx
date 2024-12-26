@@ -99,7 +99,7 @@ const AvailableCars = () => {
           </div>
         </div>
         {/* Search and View Toggle Container */}
-        <div className="flex w-full max-w-xl justify-between items-center gap-4">
+        <div className="flex w-full max-w-xl justify-between items-center gap-4 px-2 my-5">
           {/* Search Input */}
           <div className="relative flex-1">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">

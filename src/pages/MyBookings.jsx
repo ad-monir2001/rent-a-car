@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 import toast, { Toaster } from 'react-hot-toast';
+import { Helmet } from 'react-helmet-async';
 import { CalendarCog, Trash } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -140,6 +141,9 @@ const MyBookings = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>RideSphere | My Bookings</title>
+      </Helmet>
       <div className="text-center space-y-1 my-4">
         <p className="italic font-body text-gray-500">
           Your Plans, Our Priority – Seamless Booking, Every Time!
@@ -315,13 +319,15 @@ const MyBookings = () => {
             Charts Based on car Daily Rental Price
           </h1>
         </div>
-        <BarChart width={600} height={300} data={carData}>
-          <XAxis dataKey="model" stroke="#8884d8" />
-          <YAxis />
-          <Tooltip />
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <Bar dataKey="price" fill="#8884d8" barSize={30} />
-        </BarChart>
+        <div>
+          <BarChart width={600} height={300} data={carData}>
+            <XAxis dataKey="model" stroke="#8884d8" />
+            <YAxis />
+            <Tooltip />
+            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+            <Bar dataKey="price" fill="#8884d8" barSize={30} />
+          </BarChart>
+        </div>
       </div>
 
       {/* show the conformation modal */}

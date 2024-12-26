@@ -36,7 +36,7 @@ const Home = () => {
   return (
     <div>
       {/* Banner Section */}
-      <div className="w-full bg-[url(/images/banner.jpg)] md:min-h-[80vh] min-h-[40vh] bg-no-repeat bg-contain md:bg-cover bg-gray-700 bg-blend-overlay flex items-center justify-center flex-col gap-8">
+      <div className="w-full bg-[url(/images/bg.jpg)] md:min-h-[80vh] min-h-[30vh] bg-no-repeat bg-cover md:bg-cover bg-gray-700 bg-blend-overlay flex items-center justify-center flex-col gap-8">
         <h1 className="text-white font-heading font-bold md:text-4xl text-xl text-center lg:w-1/3">
           Your Perfect Ride is Just a Click Away!
         </h1>
@@ -140,15 +140,15 @@ const Home = () => {
             Voices of Trust, Stories of Satisfaction!
           </p>
           <h1 className="font-heading text-[#ff3600] font-semibold text-3xl">
-            What Our Clients are Said About Our Service
+            What Our Clients Said About Our Services
           </h1>
         </div>
-        <div className="w-10/12 mx-auto flex gap-6 my-10">
+        <div className="w-10/12 mx-auto md:flex gap-6 my-10">
           {/* card 1 */}
           <motion.div
             animate={{ y: [0, 50, 0] }}
             transition={{ duration: 15, repeat: Infinity }}
-            className="card bg-white shadow-xl p-6"
+            className="card bg-white shadow-xl p-6 mb-16 md:mb-0"
           >
             <div className="space-y-4">
               {/* Stars */}
@@ -246,7 +246,7 @@ const Home = () => {
           <motion.div
             animate={{ y: [0, 50, 0] }}
             transition={{ duration: 12, repeat: Infinity }}
-            className="card bg-white shadow-xl p-6"
+            className="card bg-white shadow-xl p-6 mt-4 md:mt-0"
           >
             <div className="space-y-4">
               {/* Stars */}
