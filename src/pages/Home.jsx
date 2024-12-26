@@ -5,9 +5,9 @@ import { RiCustomerService2Fill } from 'react-icons/ri';
 import { TbBrandBooking } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 import FeaturedCar from '../components/FeaturedCar';
-import Testimonial from '../components/Testimonial';
-import { AnimatePresence, motion } from 'framer-motion';
 import Coupon from '../components/Coupon';
+import ReactStars from 'react-rating-stars-component';
+import { easeInOut, motion } from 'framer-motion';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
@@ -69,7 +69,7 @@ const Home = () => {
             Drive Your Journey, Powered by Trust!
           </h1>
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* card */}
           <div className="flex gap-2 ">
             <FaCar className="font-bold text-3xl text-[#ff3600]" />
@@ -137,7 +137,7 @@ const Home = () => {
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {cars.map((car) => (
             <FeaturedCar key={car._id} car={car}></FeaturedCar>
           ))}
@@ -154,34 +154,153 @@ const Home = () => {
             What Our Clients are Said About Our Service
           </h1>
         </div>
-        <div className="w-11/12 mx-auto flex gap-5 my-10">
-        {/* <AnimatePresence>
-  {show ? <motion.div exit={{ opacity: 0 }} /> : null}
-</AnimatePresence> */}
-          {testimonials.map((testimonial) => (
-            <Testimonial
-              key={testimonial._id}
-              testimonial={testimonial}
-            ></Testimonial>
-          ))}
-          {/* <motion.div
-            className="flex gap-5"
-            animate={{
-              x: 0,
-            }}
-            initial={{ x: '100%' }}
-            exit={{ x: '-100%' }}
-            transition={{
-              duration: 0.5,
-              ease: 'easeInOut',
-            }}
+        <div className="w-10/12 mx-auto flex gap-6 my-10">
+          {/* card 1 */}
+          <motion.div
+            animate={{ y: [0, 50, 0] }}
+            transition={{ duration: 15, repeat: Infinity }}
+            className="card bg-white shadow-xl p-6"
           >
-            {testimonials.map((testimonial) => (
-              <motion.div key={testimonial._id} className="min-w-full">
-                <Testimonial testimonial={testimonial} />
-              </motion.div>
-            ))}
-          </motion.div> */}
+            <div className="space-y-4">
+              {/* Stars */}
+              <div className="flex gap-1">
+                {/* {renderStars()} */}
+                <ReactStars
+                  count={5}
+                  size={25}
+                  value={5}
+                  edit={false}
+                  isHalf={true}
+                  emptyIcon={<i className="far fa-star"></i>}
+                  halfIcon={<i className="fa fa-star-half-alt"></i>}
+                  fullIcon={<i className="fa fa-star"></i>}
+                  activeColor="#ffd700"
+                />
+              </div>
+
+              {/* Review Text */}
+              <p className="text-gray-600 text-base font-body">
+                Amazing experience! The car was in excellent condition and the
+                process was seamless.
+              </p>
+
+              {/* User Info */}
+              <div className="flex items-center gap-3 pt-2">
+                <div className="avatar">
+                  <div className="w-12 h-12 rounded-full">
+                    <img
+                      src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="Asif Adnan"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 font-heading">
+                    Asif Adnan
+                  </h3>
+                  <p className="font-body text-sm text-gray-500">
+                    Project Manager
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          {/* card 2 */}
+          <motion.div
+            animate={{ x: [0, 20, 0] }}
+            transition={{ duration: 5, repeat: Infinity }}
+            className="card bg-white shadow-xl p-6"
+          >
+            <div className="space-y-4">
+              {/* Stars */}
+              <div className="flex gap-1">
+                {/* {renderStars()} */}
+                <ReactStars
+                  count={5}
+                  size={25}
+                  value={4.2}
+                  edit={false}
+                  isHalf={true}
+                  emptyIcon={<i className="far fa-star"></i>}
+                  halfIcon={<i className="fa fa-star-half-alt"></i>}
+                  fullIcon={<i className="fa fa-star"></i>}
+                  activeColor="#ffd700"
+                />
+              </div>
+
+              {/* Review Text */}
+              <p className="text-gray-600 text-base font-body">
+                The car was good, but the pricing felt a bit high compared to
+                others.
+              </p>
+
+              {/* User Info */}
+              <div className="flex items-center gap-3 pt-2">
+                <div className="avatar">
+                  <div className="w-12 h-12 rounded-full">
+                    <img
+                      src="https://images.unsplash.com/photo-1580880783226-2eb5a737db5b?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="Jalal Yousuf"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 font-heading">
+                    Jalal Yousuf
+                  </h3>
+                  <p className="font-body text-sm text-gray-500">Researcher</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          {/* card 3 */}
+          <motion.div
+            animate={{ y: [0, 50, 0] }}
+            transition={{ duration: 12, repeat: Infinity }}
+            className="card bg-white shadow-xl p-6"
+          >
+            <div className="space-y-4">
+              {/* Stars */}
+              <div className="flex gap-1">
+                {/* {renderStars()} */}
+                <ReactStars
+                  count={5}
+                  size={25}
+                  value={4.5}
+                  edit={false}
+                  isHalf={true}
+                  emptyIcon={<i className="far fa-star"></i>}
+                  halfIcon={<i className="fa fa-star-half-alt"></i>}
+                  fullIcon={<i className="fa fa-star"></i>}
+                  activeColor="#ffd700"
+                />
+              </div>
+
+              {/* Review Text */}
+              <p className="text-gray-600 text-base font-body">
+                Superb! Found exactly what I was looking for. Smooth
+                transaction! process was seamless.
+              </p>
+
+              {/* User Info */}
+              <div className="flex items-center gap-3 pt-2">
+                <div className="avatar">
+                  <div className="w-12 h-12 rounded-full">
+                    <img
+                      src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="kamal"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 font-heading">
+                    Kamal Ataturk
+                  </h3>
+                  <p className="font-body text-sm text-gray-500">Sports Man</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
