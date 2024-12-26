@@ -1,11 +1,11 @@
 import { format } from 'date-fns';
 import { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 const MyCars = () => {
+  const axiosSecure = useAxiosSecure()
   const [carData, setCarData] = useState([]);
 
   const [carId, setCarId] = useState();
@@ -21,14 +21,13 @@ const MyCars = () => {
   const fetchSortedReviews = async (sortBy = '') => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}/sort`,
+      const response = await axiosSecure.get(
+        `/addCars/email/${userEmail}/sort`,
         {
           params: { sortBy },
         }
       );
       setCarData(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching sorted reviews:', error);
     } finally {
@@ -40,8 +39,8 @@ const MyCars = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}`
+        const response = await axiosSecure.get(
+          `/addCars/email/${userEmail}`
         );
         setCarData(response.data);
       } catch (error) {
@@ -52,7 +51,7 @@ const MyCars = () => {
     };
 
     fetchData();
-  }, [userEmail]);
+  }, [axiosSecure, userEmail]);
 
   // form validation
   const validateForm = (data) => {
@@ -111,8 +110,8 @@ const MyCars = () => {
       return;
     }
     try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/addCars/${carId}`,
+      const response = await axiosSecure.patch(
+        `/addCars/${carId}`,
         data
       );
       Swal.fire({
@@ -123,8 +122,8 @@ const MyCars = () => {
         timer: 1500,
       });
       document.getElementById('my_modal_5').close();
-      const updatedCars = await axios.get(
-        `${import.meta.env.VITE_API_URL}/addCars/email/${userEmail}`
+      const updatedCars = await axiosSecure.get(
+        `/addCars/email/${userEmail}`
       );
       setCarData(updatedCars.data);
       return response.data;

@@ -23,7 +23,7 @@ const CarDetails = () => {
 
   const handleBooking = (id,imageURL,model,price,bookingStatus) => {
     const bookedCarId = id;
-    const bookingDate = format(new Date(), "MM/dd/yy h:m");
+    const bookingDate = format(new Date(), "dd/MM/yy h:m");
     const bookedBy = user.email;
     const bookingData = { bookedCarId, bookedBy, bookingDate,imageURL, model,price,bookingStatus};
 

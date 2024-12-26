@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { format } from 'date-fns';
+import toast, { Toaster } from 'react-hot-toast';
 import { CalendarCog, Trash } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -9,7 +10,9 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../providers/AuthProvider';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 const MyBookings = () => {
+  const axiosSecure = useAxiosSecure()
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -32,28 +35,27 @@ const MyBookings = () => {
   const handleBookingDate = async (id) => {
     try {
       if (!selectedStartDate || !selectedEndDate) {
-        console.error('Please select both start and end dates');
+        toast.success('Please select both start and end dates');
         return;
       }
-      const bookingStart = format(new Date(selectedStartDate), 'MM/dd/yy');
-      const bookingEnd = format(new Date(selectedEndDate), 'MM/dd/yy');
-      const date = `${bookingStart} to ${bookingEnd}`;
+      const bookingStart = new Date(selectedStartDate).toISOString();
+      const bookingEnd = new Date(selectedEndDate).toISOString();
 
-      // Add error handling and loading state if needed
-      const response = await axios.patch(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/bookedCars/${id}`,
         {
-          date,
-          userEmail: user.email,
-          updatedAt: new Date().toISOString(),
+          bookingStart,
+          bookingEnd,
         }
       );
-      console.log('Booking updated successfully:', response.data);
+      toast.success('Booking updated successfully:', response.data);
+      console.log(bookingEnd, bookingStart);
+      console.log(typeof bookingEnd);
 
       setSelectedStartDate(null);
       setSelectedEndDate(null);
     } catch (error) {
-      console.error('Error updating booking:', error);
+      toast.error('Error updating booking:', error);
     }
   };
 
@@ -61,8 +63,8 @@ const MyBookings = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/bookedCars/${userEmail}`
+        const response = await axiosSecure.get(
+          `/bookedCars/${userEmail}`
         );
         setCarData(response.data);
       } catch (error) {
@@ -130,10 +132,14 @@ const MyBookings = () => {
           My Bookings
         </h1>
       </div>
+      <Toaster />
       <div className="flex flex-col mt-6">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className=" w-11/12 my-10 mx-auto py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden border border-gray-200 md:rounded-lg">
+              <div>
+                
+              </div>
               <table className="min-w-full divide-y divide-gray-200 ">
                 <thead className="">
                   <tr className="bg-[#e8f5e9] text-[#1b5e20]">
@@ -204,8 +210,9 @@ const MyBookings = () => {
                           {parseInt(car.price) + parseInt(car.price * 0.15)}
                         </td>
                         <td className="px-4 py-4 text-sm  font-body whitespace-nowrap">
-                          {/* {format(new Date(car.date), 'MM/dd/yy h:m')} */}
-                          {car.bookingDate}
+                          {!car.bookingStart
+                            ? car.bookingDate
+                            : `${car.bookingStart} to ${car.bookingEnd}`}
                         </td>
                         <td className="px-4 py-4 font-body  whitespace-nowrap">
                           <div
@@ -285,11 +292,16 @@ const MyBookings = () => {
         </div>
       </div>
 
-      <div className='mx-auto w-11/12 my-10'>
-      <div className='text-center my-9 space-y-1'>
-      <p className='font-body italic text-gray-500'>Drive Your Budget Further – Affordable Daily Rentals for Every Journey!</p>
-      <h1 className='font-heading text-[#ff3600] font-semibold text-2xl'>Charts Based on car Daily Rental Price</h1>
-      </div>
+      <div className="mx-auto w-11/12 my-10">
+        <div className="text-center my-9 space-y-1">
+          <p className="font-body italic text-gray-500">
+            Drive Your Budget Further – Affordable Daily Rentals for Every
+            Journey!
+          </p>
+          <h1 className="font-heading text-[#ff3600] font-semibold text-2xl">
+            Charts Based on car Daily Rental Price
+          </h1>
+        </div>
         <BarChart width={600} height={300} data={carData}>
           <XAxis dataKey="model" stroke="#8884d8" />
           <YAxis />
@@ -301,6 +313,7 @@ const MyBookings = () => {
 
       {/* show the conformation modal */}
       <dialog id="conform" className="modal modal-bottom sm:modal-middle">
+      <Toaster />
         <div className="modal-box text-center">
           <h3 className="font-bold text-xl font-heading text-[#ff3600]">
             Select Your Booking Date
@@ -332,7 +345,6 @@ const MyBookings = () => {
               method="dialog"
               className="flex justify-between gap-4 items-center"
             >
-              {/* if there is a button in form, it will close the modal */}
               <button
                 onClick={handleBookingDate}
                 className="btn btn-success font-heading text-white"
