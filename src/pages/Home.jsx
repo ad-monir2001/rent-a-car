@@ -11,7 +11,6 @@ import { easeInOut, motion } from 'framer-motion';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
   const [coupons, setCoupons] = useState([]);
 
   // fetch featured cars
@@ -20,16 +19,6 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setCars(data);
-      })
-      .catch((error) => console.error('Error:', error));
-  }, []);
-
-  // fetch testimonial data
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/testimonials`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTestimonials(data);
       })
       .catch((error) => console.error('Error:', error));
   }, []);

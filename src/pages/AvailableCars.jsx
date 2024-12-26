@@ -2,7 +2,7 @@ import axios from 'axios';
 import { LayoutGrid, List } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import AvailableCarCard from '../components/AvailableCarCard';
-
+import { Helmet } from 'react-helmet-async';
 const AvailableCars = () => {
   const [carData, setCarData] = useState([]);
   const [sortOption, setSortOption] = useState('');
@@ -14,9 +14,12 @@ const AvailableCars = () => {
   const fetchSortedReviews = async (sortBy = '') => {
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars/sort`, {
-        params: { sortBy },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/addCars/sort`,
+        {
+          params: { sortBy },
+        }
+      );
       setCarData(response.data);
     } catch (error) {
       console.error('Error fetching sorted reviews:', error);
@@ -38,7 +41,9 @@ const AvailableCars = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/addCars`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/addCars`
+        );
         setCarData(response.data);
       } catch (error) {
         console.error('An error occurred while fetching car data:', error);
@@ -52,6 +57,9 @@ const AvailableCars = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>RideSphere | Available Cars</title>
+      </Helmet>
       <div className="text-center space-y-2 my-8">
         <p className="font-body text-gray-500 italic">
           Your Journey Awaits – Choose the Perfect Ride! 🚘🌟
