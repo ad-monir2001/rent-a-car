@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const AvailableCarCard = ({ car }) => {
   return (
-    <div className="max-w-xs mx-auto bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+    <div className="max-w-xs mx-auto bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full">
       <img
         src={car.imageURL}
         alt={car.model}
@@ -18,7 +18,7 @@ const AvailableCarCard = ({ car }) => {
         >
           {car.availability}
         </div>
-        <h3 className="text-xl font-bold font-heading">{car.model}</h3>
+        <h3 className="text-xl font-bold font-heading line-clamp-1">{car.model}</h3>
         <p className="text-sm text-gray-500 font-body">
           {car.description.slice(0, 60)}...
         </p>

@@ -327,7 +327,7 @@ const Home = () => {
         </h1>
         <div className="flex items-center flex-col md:flex-row gap-4 md:gap-14">
           {/* lottie file */}
-          <div className="flex-1 px-2">
+          <div className=" px-2">
             {' '}
             <Lottie options={defaultOptions} />
           </div>
