@@ -8,7 +8,8 @@ import FeaturedCar from '../components/FeaturedCar';
 import Coupon from '../components/Coupon';
 import ReactStars from 'react-rating-stars-component';
 import { easeInOut, motion } from 'framer-motion';
-
+import Lottie from 'react-lottie';
+import animationData from '/public/faq.json';
 const Home = () => {
   const [cars, setCars] = useState([]);
   const [coupons, setCoupons] = useState([]);
@@ -32,6 +33,15 @@ const Home = () => {
       })
       .catch((error) => console.error('Error:', error));
   }, []);
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
 
   return (
     <div>
@@ -309,6 +319,74 @@ const Home = () => {
           ))}
         </div>
       </div>
+
+      {/* FAQ */}
+      <section className="w-11/12 mx-auto my-14">
+        <h1 className="font-Audiowide text-3xl md:text-5xl text-center my-3">
+          FAQ
+        </h1>
+        <div className="flex items-center flex-col md:flex-row gap-4 md:gap-14">
+          {/* lottie file */}
+          <div className="flex-1 px-2">
+            {' '}
+            <Lottie options={defaultOptions} />
+          </div>
+          {/* accordion */}
+          <div className="space-y-2">
+            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+              <input type="radio" name="my-accordion-2" defaultChecked />
+              <div className="collapse-title text-xl font-medium font-Audiowide ">
+                What types of games are available on your website?
+              </div>
+              <div className="collapse-content">
+                <p className="font-Poppins">
+                  {' '}
+                  We offer a variety of games, including action, adventure,
+                  strategy, simulation, multiplayer, and more.
+                </p>
+              </div>
+            </div>
+            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+              <input type="radio" name="my-accordion-2" />
+              <div className="collapse-title text-xl font-medium font-Audiowide">
+                What are the system requirements for playing games on your
+                website?
+              </div>
+              <div className="collapse-content">
+                <p className="font-Poppins">
+                  Each game has its own system requirements. Check the game’s
+                  description for detailed information.
+                </p>
+              </div>
+            </div>
+            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+              <input type="radio" name="my-accordion-2" />
+              <div className="collapse-title text-xl font-medium font-Audiowide">
+                Can I suggest a new game for your website?
+              </div>
+              <div className="collapse-content">
+                <p className="font-Poppins">
+                  Absolutely! We welcome suggestions from our community. Use the
+                  "Contact Us" form to send your ideas.
+                </p>
+              </div>
+            </div>
+            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+              <input type="radio" name="my-accordion-2" />
+              <div className="collapse-title text-xl font-medium font-Audiowide">
+                How do I create an account?
+              </div>
+              <div className="collapse-content">
+                <p className="font-Poppins">
+                  Click the "Sign Up" button at the top-right corner of the
+                  website, fill out the registration form, and verify your email
+                  to complete the process.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
