@@ -7,7 +7,7 @@ const Navbar = () => {
   const links = (
     <div className="flex gap-2 lg:flex-row flex-col">
       <li>
-        <NavLink className="font-heading text-base" to="/">
+        <NavLink className="font-heading text-base" to="/"> 
           Home
         </NavLink>
       </li>
@@ -22,7 +22,7 @@ const Navbar = () => {
           <li>
             <NavLink className="font-heading text-base" to="add-car">
               Add Car
-            </NavLink>
+            </NavLink>   
           </li>
           <li>
             <NavLink className="font-heading text-base" to="my-cars">

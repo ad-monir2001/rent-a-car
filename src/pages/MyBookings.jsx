@@ -71,7 +71,7 @@ const MyBookings = () => {
         error.response?.data?.message || 'Error updating booking dates'
       );
     }
-  };
+  };  
 
   const openDateModal = (carId) => {
     setSelectedCarId(carId);
