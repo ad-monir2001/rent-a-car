@@ -322,7 +322,7 @@ const Home = () => {
 
       {/* FAQ */}
       <section className="w-11/12 mx-auto my-14">
-        <h1 className="font-Audiowide text-3xl md:text-5xl text-center my-3">
+        <h1 className="font-heading text-3xl md:text-5xl text-center my-3">
           FAQ
         </h1>
         <div className="flex items-center flex-col md:flex-row gap-4 md:gap-14">
@@ -333,54 +333,55 @@ const Home = () => {
           </div>
           {/* accordion */}
           <div className="space-y-2">
-            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+            <div className="collapse collapse-arrow bg-base-200">
               <input type="radio" name="my-accordion-2" defaultChecked />
-              <div className="collapse-title text-xl font-medium font-Audiowide ">
-                What types of games are available on your website?
+              <div className="collapse-title text-xl font-medium font-heading ">
+                What are the requirements to rent a car?
               </div>
               <div className="collapse-content">
-                <p className="font-Poppins">
+                <p className="font-body">
                   {' '}
-                  We offer a variety of games, including action, adventure,
-                  strategy, simulation, multiplayer, and more.
+                  You need a valid driver’s license, a government-issued ID, and
+                  a credit card in your name. Minimum age restrictions may
+                  apply.
                 </p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+            <div className="collapse collapse-arrow bg-base-200 ">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title text-xl font-medium font-Audiowide">
-                What are the system requirements for playing games on your
-                website?
+              <div className="collapse-title text-xl font-medium font-heading">
+                What is the minimum age to rent a car?
               </div>
               <div className="collapse-content">
-                <p className="font-Poppins">
-                  Each game has its own system requirements. Check the game’s
-                  description for detailed information.
+                <p className="font-body">
+                  The minimum age varies by location, but it’s usually 21.
+                  Drivers under 25 may be subject to an additional fee.
                 </p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+            <div className="collapse collapse-arrow bg-base-200 ">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title text-xl font-medium font-Audiowide">
-                Can I suggest a new game for your website?
+              <div className="collapse-title text-xl font-medium font-heading">
+                Do I need insurance to rent a car?
               </div>
               <div className="collapse-content">
-                <p className="font-Poppins">
-                  Absolutely! We welcome suggestions from our community. Use the
-                  "Contact Us" form to send your ideas.
+                <p className="font-body">
+                  While insurance is not mandatory, it is highly recommended.
+                  You can use your own car insurance, credit card coverage, or
+                  purchase insurance through us.
                 </p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-base-200 dark:bg-gray-800">
+            <div className="collapse collapse-arrow bg-base-200 ">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title text-xl font-medium font-Audiowide">
-                How do I create an account?
+              <div className="collapse-title text-xl font-medium font-heading">
+                Can I rent a car without a credit card?
               </div>
               <div className="collapse-content">
-                <p className="font-Poppins">
-                  Click the "Sign Up" button at the top-right corner of the
-                  website, fill out the registration form, and verify your email
-                  to complete the process.
+                <p className="font-body">
+                  Most rentals require a credit card for security purposes, but
+                  some locations may accept debit cards with additional
+                  verification.
                 </p>
               </div>
             </div>
