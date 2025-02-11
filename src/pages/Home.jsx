@@ -322,9 +322,15 @@ const Home = () => {
 
       {/* FAQ */}
       <section className="w-11/12 mx-auto my-14">
-        <h1 className="font-heading text-3xl md:text-5xl text-center my-3">
-          FAQ
-        </h1>
+        {/* heading */}
+        <div className='text-center py-10'>
+          <p className="font-body italic text-gray-500">
+            Drive Your Questions Away – Everything You Need to Know!
+          </p>
+          <h1 className="font-heading text-[#ff3600] font-semibold text-3xl">
+            FAQ
+          </h1>
+        </div>
         <div className="flex items-center flex-col md:flex-row gap-4 md:gap-14">
           {/* lottie file */}
           <div className=" px-2">
